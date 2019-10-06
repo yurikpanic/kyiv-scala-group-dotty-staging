@@ -1,0 +1,21 @@
+target/
+*.class
+*.log
+.dotty*
+_site
+
+
+# Idea
+*.iml
+.idea/
+
+# metals
+.metals/
+.bloop/
+
+# Vim
+*.swp
+
+# Mac OS X
+.DS_Store
+
