@@ -11,9 +11,12 @@ object Main
     import Exp._
     import Compiler._
 
-    val exp = Let("x", 
-      And(Or(Bool(true), Bool(false)), And(Bool(true), And(Bool(false), Bool(true)))),
-      Or(Bool(false), Not(Val("x"))))
+    val exp = 
+      Let("y",
+        Bool(true),
+        Let("x", 
+          And(Or(Bool(true), Bool(false)), And(Bool(true), And(Bool(false), Bool(true)))),
+          And(Val("y"), Not(Val("x")))))
 
     println("=== compiling")
     val cc = withQuoteContext(compile(exp))
