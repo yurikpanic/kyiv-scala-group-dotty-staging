@@ -12,12 +12,21 @@ object Main
     import Compiler._
     import Interoreter._
 
-    val exp = 
+    // let y = true && z in let x = (true || false) && (true && false && true) in y && !x
+    val expDefault = 
       Let("y",
         And(Bool(true), Val("z")),
         Let("x", 
           And(Or(Bool(true), Bool(false)), And(Bool(true), And(Bool(false), Bool(true)))),
           And(Val("y"), Not(Val("x")))))
+
+    val exp = 
+      if (args.length >= 1)
+        val res = Parser.parse(Parser.exp, args(0)).get
+        println(s"=== parsed: $res")
+        res
+      else
+        expDefault
 
     def compiled(exp: Exp)(given QuoteContext): Expr[Map[String, Boolean] => Boolean] =
       '{ (args: Map[String, Boolean]) => ${ compile(exp, 'args) } }

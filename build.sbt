@@ -10,6 +10,7 @@ lazy val root = project
 
     libraryDependencies ++= Seq(
       "ch.epfl.lamp" %% "dotty-staging" % dottyVersion,
-      "com.novocode" % "junit-interface" % "0.11" % "test"
+      "com.novocode" % "junit-interface" % "0.11" % "test",
+      "org.scala-lang.modules" % "scala-parser-combinators_2.13" % "1.1.2"
     )
   )
