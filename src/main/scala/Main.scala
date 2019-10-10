@@ -10,6 +10,7 @@ object Main
   def main(args: Array[String]): Unit = 
     import Exp._
     import Compiler._
+    import Interoreter._
 
     val exp = 
       Let("y",
@@ -28,7 +29,29 @@ object Main
 
     println("=== result")
     val result = run(cc)
+
     println(result(Map("z" -> false)))
     println(result(Map("z" -> true)))
+
+    println("=== interpret")
+    println(eval(exp, Map("z" -> false)))
+    println(eval(exp, Map("z" -> true)))
+
+    val repCount = 1000000
+
+    val params = Map("z" -> true)
+    
+    val startCompiled = System.currentTimeMillis
+    (1 to repCount).foreach(_ => result(params)) 
+    val timeCompiled = System.currentTimeMillis - startCompiled
+    println(s"== compiled: ${timeCompiled}")
+
+    val startInterpreted = System.currentTimeMillis
+    (1 to repCount).foreach(_ => eval(exp, params)) 
+    val timeInterpreted = System.currentTimeMillis - startInterpreted
+    println(s"== interpreted: ${timeInterpreted}")
+
+    println(s"== speedup: ${timeInterpreted.toDouble / timeCompiled}")
+
 
 
