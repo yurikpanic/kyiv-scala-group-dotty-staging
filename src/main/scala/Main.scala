@@ -13,18 +13,22 @@ object Main
 
     val exp = 
       Let("y",
-        Bool(true),
+        And(Bool(true), Val("z")),
         Let("x", 
           And(Or(Bool(true), Bool(false)), And(Bool(true), And(Bool(false), Bool(true)))),
           And(Val("y"), Not(Val("x")))))
 
+    def compiled(exp: Exp)(given QuoteContext): Expr[Map[String, Boolean] => Boolean] =
+      '{ (args: Map[String, Boolean]) => ${ compile(exp, 'args) } }
+
     println("=== compiling")
-    val cc = withQuoteContext(compile(exp))
+    val cc = withQuoteContext(compiled(exp))
     println("=== code")
     println(withQuoteContext(cc.show))
 
     println("=== result")
     val result = run(cc)
-    println(result)
+    println(result(Map("z" -> false)))
+    println(result(Map("z" -> true)))
 
 
