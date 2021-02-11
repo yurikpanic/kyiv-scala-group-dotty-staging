@@ -1,5 +1,5 @@
 
-object Interoreter
+object Interpreter:
   import Exp._
 
   def eval(exp: Exp, args: Map[String, Boolean]): Boolean = exp match

@@ -12,6 +12,8 @@ _site
 # metals
 .metals/
 .bloop/
+metals.sbt
+.bsp/
 
 # Vim
 *.swp
