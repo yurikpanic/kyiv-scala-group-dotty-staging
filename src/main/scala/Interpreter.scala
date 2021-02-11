@@ -1,8 +1,8 @@
 
 object Interpreter:
-  import Exp._
+  import ast.Exp._
 
-  def eval(exp: Exp, args: Map[String, Boolean]): Boolean = exp match
+  def eval(exp: ast.Exp, args: Map[String, Boolean]): Boolean = exp match
     case Bool(x) => x
 
     case Not(smth) => !eval(smth, args)

@@ -1,9 +1,9 @@
 import scala.quoted._
 
 object Compiler:
-  import Exp._
+  import ast.Exp._
 
-  def compile(exp: Exp, args: Expr[Map[String, Boolean]], symtab: Map[String, Expr[Boolean]] = Map.empty)(using Quotes): Expr[Boolean] = exp match
+  def compile(exp: ast.Exp, args: Expr[Map[String, Boolean]], symtab: Map[String, Expr[Boolean]] = Map.empty)(using Quotes): Expr[Boolean] = exp match
     case Bool(value) => Expr(value)
 
     case Not(exp)  => '{ !(${compile(exp, args, symtab)}) }

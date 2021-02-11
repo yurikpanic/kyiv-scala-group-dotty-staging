@@ -8,7 +8,7 @@ object Main:
   given Toolbox = Toolbox.make(getClass.getClassLoader)
 
   def main(args: Array[String]): Unit =
-    import Exp._
+    import ast.Exp._
     import Compiler._
     import Interpreter._
 
@@ -22,13 +22,13 @@ object Main:
 
     val exp =
       if (args.length >= 1)
-        val res = Parser.parse(Parser.exp, args(0)).get
+        val res = parse.expr.parse(args(0)).right.get._2
         println(s"=== parsed: $res")
         res
       else
         expDefault
 
-    def compiled(exp: Exp)(using Quotes): Expr[Map[String, Boolean] => Boolean] =
+    def compiled(exp: ast.Exp)(using Quotes): Expr[Map[String, Boolean] => Boolean] =
       '{ (args: Map[String, Boolean]) => ${ compile(exp, 'args) } }
 
     println("=== compiling")
