@@ -2,14 +2,13 @@
 import scala.quoted._
 import scala.quoted.staging.{run, withQuotes, Toolbox}
 
-object Main:
+object Main {
 
   // Needed to run or show quotes
   given Toolbox = Toolbox.make(getClass.getClassLoader)
 
-  def main(args: Array[String]): Unit =
+  def main(args: Array[String]): Unit = {
     import ast.Exp._
-    import Compiler._
     import Interpreter._
 
     // let y = true && z in let x = (true || false) && (true && false && true) in y && !x
@@ -29,7 +28,16 @@ object Main:
         expDefault
 
     def compiled(exp: ast.Exp)(using Quotes): Expr[Map[String, Boolean] => Boolean] =
-      '{ (args: Map[String, Boolean]) => ${ compile(exp, 'args) } }
+      '{ (args: Map[String, Boolean]) => ${ compiler.compile(exp, 'args) } }
+
+    val m = mcompiler.compile(
+        Let("y",
+          And(Bool(true), Val("z")),
+          Let("x",
+            And(Or(Bool(true), Bool(false)), And(Bool(true), And(Bool(false), Bool(true)))),
+            And(Val("y"), Not(Val("x"))))), 
+        Map("z" -> false))
+    println(s"=== macro (z -> false): $m")
 
     println("=== compiling")
     val cc = withQuotes(compiled(exp))
@@ -61,6 +69,6 @@ object Main:
     println(s"== interpreted: ${timeInterpreted}")
 
     println(s"== speedup: ${timeInterpreted.toDouble / timeCompiled}")
+  }
 
-
-
+}

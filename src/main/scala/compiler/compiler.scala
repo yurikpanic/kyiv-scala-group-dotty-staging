@@ -1,9 +1,11 @@
+package compiler
+
 import scala.quoted._
 
-object Compiler:
-  import ast.Exp._
+import ast.Exp._
 
-  def compile(exp: ast.Exp, args: Expr[Map[String, Boolean]], symtab: Map[String, Expr[Boolean]] = Map.empty)(using Quotes): Expr[Boolean] = exp match
+def compile(exp: ast.Exp, args: Expr[Map[String, Boolean]], symtab: Map[String, Expr[Boolean]] = Map.empty)(using Quotes): Expr[Boolean] = 
+  exp match {
     case Bool(value) => Expr(value)
 
     case Not(exp)  => '{ !(${compile(exp, args, symtab)}) }
@@ -14,4 +16,5 @@ object Compiler:
       '{ val x = ${compile(value, args, symtab)}; ${compile(in, args, symtab + (name -> 'x))} }
     case Val(name) =>
       symtab.getOrElse(name, '{ ${args}.apply(${Expr(name)}) })
+  }
 
